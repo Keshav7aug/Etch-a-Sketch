@@ -5,11 +5,24 @@
         <script src="script.js" defer></script>
     </head>
     <body>
-        <div class="selections">
-            
-        </div>
-        <div class="grid">
+        <header>Etch - a - Sketch</header>
+        <div class="content">
+            <div class="selections">
+                <input type="color" id="colourPicker" value="#551282">
+                <input type="range" min="2" max="30" value="4", id="slider">
+                <label for="slider"></label>
+                <div>
+                    <input type="radio" id="invert" name="colourType" value="invert">
+                    <label for="invert">Inverted Colour</label>
+                </div>
+                <div>
+                    <input type="radio" id="random" name="colourType" value="random" checked>
+                    <label for="random">Random Colour</label>
+                </div>
+            </div>
+            <div class="grid">
 
+            </div>
         </div>
     </body>
 </html>
