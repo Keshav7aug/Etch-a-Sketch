@@ -32,18 +32,36 @@ function changeSize(e) {
     gridSize = e.target.value
     createGrid()
 }
+function getHex(value) {
+    hexString = value.toString(16);
+    return hexString;
+}
 function getRandomColour() {
     const r = Math.floor(Math.random()*255)
     const g = Math.floor(Math.random()*255)
     const b = Math.floor(Math.random()*255)
-    return `#${padZero(r)}${padZero(g)}${padZero(b)}`
+    return `#${padZero(getHex(r))}${padZero(getHex(g))}${padZero(getHex(b))}`
 }
 function hoverEffect(e) {
+    let chosenColor = ""
     if(randomCP.checked) {
-        e.target.style.backgroundColor = getRandomColour(0)
+        chosenColor = getRandomColour(0)
     }
     else {
-        e.target.style.backgroundColor = hoverColor
+        chosenColor = hoverColor
+    }
+    e.target.style.backgroundColor = chosenColor
+    let r=0,g=0,b=0
+    r = parseInt(chosenColor.slice(1, 3), 16)
+    g = parseInt(chosenColor.slice(3, 5), 16)
+    b = parseInt(chosenColor.slice(5, 7), 16)
+    let val = r+g+b
+    val = Math.floor((val/765)*4000)+1000
+    console.log(val)
+    const playSound = document.querySelector("#sound")
+    console.log(playSound.value)
+    if(playSound.checked) {
+        playNote(val,'square')
     }
 }
 function createGrid() {
@@ -60,6 +78,20 @@ function createGrid() {
         }
     }
     grid.style["grid-template-columns"] = gridRows
+}
+
+var context=new AudioContext();
+var o=null;
+var g=null;
+function playNote(frequency, type) {
+    o = context.createOscillator();
+    g = context.createGain();
+    o.type = type;
+    o.connect(g);
+    o.frequency.value = frequency;
+    g.connect(context.destination);
+    o.start(0);
+    g.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 1);
 }
 
 colourPicker.addEventListener("input", changeBackground)
